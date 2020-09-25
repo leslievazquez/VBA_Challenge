@@ -1,0 +1,82 @@
+'Step One: VBA_Challenge
+'Level of Difficulty: Easy 
+
+'Create a script that will loop through each year of stock data and count the total amount of volume each stock in the year.
+'Create a script to display the ticker symbol that coincides with the total volume.
+'* Your result for the 2014 data should look like this:
+'![easy_solution](Images/Easy_Solution_YR2014.png)
+
+Sub RunLoop()
+
+'Loop through all worksheets in active workbook
+    Dim ws As Worksheet
+    Application.ScreenUpdating = False
+    For Each ws In Worksheets
+        ws.Select
+        Call TickerName
+    Next
+    Application.ScreenUpdating = True
+End Sub
+
+Sub TickerName()
+
+        'Name columns I-L
+        
+        Range("I1").Select
+        ActiveCell.FormulaR1C1 = "Ticker"
+        Range("J1").Select
+        ActiveCell.FormulaR1C1 = "Yearly Change"
+        Range("K1").Select
+        ActiveCell.FormulaR1C1 = "Percent Change"
+        Range("L1").Select
+        ActiveCell.FormulaR1C1 = "Total Stock Volume"
+           
+        'Set a variable for holding the ticker name
+        Dim TickerName As String
+    
+        'Set a variable for holding a total count on the total volume of trade
+        Dim TickerVolume As Double
+        TickerVolume = 0
+        
+        'Set a counter for the rows that contain value in the summary table
+        Dim RowCount As Integer
+        '2 is the first row of values in summary table
+        RowCount = 2
+        
+       'Count the number of rows in the first column.
+        LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+        'Loop through the rows by the ticker names
+            
+        For i = 2 To LastRow
+        
+          'Searches for when the value of the next cell is different than that of the current cell
+            If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+                
+                'Set the ticker name
+                TickerName = Cells(i, 1).Value
+
+                'Print the ticker name in the table
+                Range("I" & RowCount).Value = TickerName
+                
+                'Add the volume of trade
+                TickerVolume = TickerVolume + Cells(i, 7).Value
+
+                'Print the trade volume for each ticker in the table
+                Range("L" & RowCount).Value = TickerVolume
+
+                'Add one to RowCount
+                RowCount = RowCount + 1
+
+                'Set tickervolume to zero
+                TickerVolume = 0
+           
+           Else
+               'Add the volume of trade
+                TickerVolume = TickerVolume + Cells(i, 7).Value
+
+            End If
+        
+        Next
+
+End Sub
