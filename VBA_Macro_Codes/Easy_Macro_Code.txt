@@ -4,7 +4,7 @@
 'Create a script that will loop through each year of stock data and count the total amount of volume each stock in the year.
 'Create a script to display the ticker symbol that coincides with the total volume.
 '* Your result for the 2014 data should look like this:
-![Easy Solution](/Images/Easy_Solution_YR2014.png)
+![Easy Solution](Images/Easy_Solution_YR2014.png)
 
 Sub Easy()
 
