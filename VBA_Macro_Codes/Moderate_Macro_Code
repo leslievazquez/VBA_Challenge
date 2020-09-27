@@ -1,0 +1,120 @@
+'VBA_Challenge
+'Level of Difficulty: Moderate
+
+'Create a script that will loop through all the stocks and take the following info.
+    'Yearly change from what the stock opened the year at to what the closing price was.
+    'The percent change from the what it opened the year at to what it closed.
+    'The total Volume of the stock
+    'Ticker symbol
+    'Use conditional formatting to highlight the positive change in green and negative change in red
+
+'Your result should look like the image located in the Images folder, Moderate_Solution_YR2014. Note that this image is displaying data for the worksheet 2014.
+
+'Note: The macro code below runs after the Easy_Macro_Code. 
+
+Sub Moderate()
+
+'Create a loop to cycle through the worksheets in the workbook
+'Set a variable to cycle through the worksheets
+
+Dim ws As Worksheet
+
+    'Start loop
+
+    For Each ws In Worksheets
+
+    Dim ticker_symbol As String
+    Dim total_volume As Double
+    total_volume = 0
+    
+    'Set a counter for the rows that contain value in the summary table
+    Dim row_count As Integer
+    '2 is the first row of values in summary table
+    row_count = 2
+    
+    'Formula to calculate yearly change ((Close - Open)/Open)*100
+    Dim yearly_change As Double
+    Dim percent_change As Double
+    Dim stock_close As Double
+    
+    'Set the initial value for stock_open. The other opening prices will be determined in the conditional loop.
+    Dim stock_open As Double
+    stock_open = Cells(2, 3).Value
+   
+    'Count the number of rows in the first column.
+    Dim lastrow As Double
+    lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+    Dim summary_row As Integer
+    summary_row = 2
+
+    'Loop through the rows
+    For i = 2 To lastrow
+       
+    'Search when the value of the next cell is different than that of the current cell
+    If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+                
+        'Collect the data of closing price (stock_close)
+        stock_close = ws.Cells(i, 6).Value
+
+        'Calculate the yearly change
+        yearly_change = (stock_open - stock_close)
+              
+        'Print the yearly change for each ticker in the summary table
+        ws.Range("J" & summary_row).Value = yearly_change
+
+            'Check for the non-divisibilty condition when calculating the percent change
+            If (stock_open = 0) Then
+    
+                percent_change = 0
+    
+            Else
+                        
+                percent_change = yearly_change / stock_open
+                    
+            End If
+            
+        'Print the percent change for each ticker in the summary table
+        ws.Range("K" & summary_row).Value = percent_change
+        ws.Range("K" & summary_row).NumberFormat = "0.00%"
+   
+        'Reset the row counter in the summary table. Add one to the summary_row
+        summary_row = summary_row + 1
+
+        'Reset tickervolume to zero
+        total_volume = 0
+        
+        'Reset the opening price
+        stock_open = Cells(i + 1, 3)
+            
+        Else
+              
+            'Add the volume of trade
+            total_volume = total_volume + ws.Cells(i, 7).Value
+
+            
+        End If
+        
+    Next i
+
+    'Use conditional formatting to highlight positive change in green and negative change in red
+    'First find the last row of the summary table
+
+    lastrow_summary_table = ws.Cells(Rows.Count, 9).End(xlUp).Row
+    
+    'Color code yearly change
+    
+    For i = 2 To lastrow_summary_table
+            If ws.Cells(i, 10).Value > 0 Then
+                ws.Cells(i, 10).Interior.ColorIndex = 10
+            Else
+                ws.Cells(i, 10).Interior.ColorIndex = 3
+            End If
+    Next i
+        
+    'Autofit table columns
+    ws.Columns("I:L").EntireColumn.AutoFit
+    
+    Next ws
+    
+End Sub
