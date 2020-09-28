@@ -1,0 +1,64 @@
+'VBA_Challenge
+'Level of Difficulty: Hard
+
+'Create a script that locates the stock with the:
+    '"Greatest % increase"
+    '"Greatest % Decrease"
+    '"Greatest total volume"
+    
+'Your result should look like the image located in the Images folder, Hard_Solution_YR2014. Note that this image is displaying data for the worksheet 2014.
+
+'Note: The macro code should be used after the Easy_Macro_Code and Moderate_Marco_Code.
+
+
+Sub Hard()
+
+Dim ws As Worksheet
+
+    'Start loop
+
+    For Each ws In Worksheets
+
+    'Place headers to columns O2:O4 and P1, Q1 to create a table
+
+        ws.Cells(2, 15).Value = "Greatest % Increase"
+        ws.Cells(3, 15).Value = "Greatest % Decrease"
+        ws.Cells(4, 15).Value = "Greatest Total Volume"
+        ws.Cells(1, 16).Value = "Ticker"
+        ws.Cells(1, 17).Value = "Value"
+        
+    'Find the last row of the summary table
+
+    lastrow_summary_table = ws.Cells(Rows.Count, 9).End(xlUp).Row
+
+    'Calculate the max and min values in column "Percent Change" and the max in column "Total Stock Volume"
+    'Then collect the ticker symbol with its corresponding values for the percent change and total volume of trade for that ticker
+    
+            For i = 2 To lastrow_summary_table
+            'Find the maximum percent change
+            If ws.Cells(i, 11).Value = Application.WorksheetFunction.Max(ws.Range("K2:K" & lastrow_summary_table)) Then
+                ws.Cells(2, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(2, 17).Value = ws.Cells(i, 11).Value
+                ws.Cells(2, 17).NumberFormat = "0.00%"
+
+            'Find the minimum percent change
+            ElseIf ws.Cells(i, 11).Value = Application.WorksheetFunction.Min(ws.Range("K2:K" & lastrow_summary_table)) Then
+                ws.Cells(3, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(3, 17).Value = ws.Cells(i, 11).Value
+                ws.Cells(3, 17).NumberFormat = "0.00%"
+            
+            'Find the maximum volume of trade
+            ElseIf ws.Cells(i, 12).Value = Application.WorksheetFunction.Max(ws.Range("L2:L" & lastrow_summary_table)) Then
+                ws.Cells(4, 16).Value = ws.Cells(i, 9).Value
+                ws.Cells(4, 17).Value = ws.Cells(i, 12).Value
+            
+            End If
+        
+        Next i
+            
+        'Autofit table columns
+        ws.Columns("O:Q").EntireColumn.AutoFit
+    
+        Next ws
+
+End Sub
