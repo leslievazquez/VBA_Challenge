@@ -1,0 +1,8 @@
+'Main_Macro was created to Call three scripts which are located in VBA_Macro_Codes based on level of difficulty 
+
+Sub Main_Macro()
+    Call Easy.Easy
+    Call Moderate.Moderate
+    Call Hard.Hard
+    
+End Sub
