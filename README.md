@@ -25,3 +25,6 @@ Visual Basic Applications (VBA) script loops through three years of stock price 
 
 ## *Challenge*
 * Make the appropriate adjustments to your script that will allow it to run on every worksheet just by running it once.
+
+
+## NOTE: Consider using the sheet alphabetical_testing_RAW.xlsx while developing your code. This dataset is smaller and will allow you to test faster.
